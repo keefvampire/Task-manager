@@ -1,0 +1,18 @@
+{
+  "name": "task-manager-api",
+  "version": "1.0.0",
+  "description": "A simple Task Manager API with Express backend and HTML/CSS/JS frontend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["task", "todo", "api", "express"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {}
+}
