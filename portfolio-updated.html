@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julián Miranda | Portafolio Ingeniería & IA</title>
+    <style>
+        /* Paleta de colores Dark Minimalist */
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent: #58a6ff; 
+            --accent-green: #2ea44f; 
+            --border-color: #30363d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- FONDO ANIMADO (TECH GRID) --- */
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(rgba(88, 166, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(88, 166, 255, 0.04) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: panGrid 20s linear infinite;
+        }
+
+        @keyframes panGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 30px; }
+        }
+
+        /* --- BARRA DE TERMINAL (vsVamp) --- */
+        .terminal-bar {
+            background-color: #0d1117;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.9rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .term-dots {
+            display: flex;
+            gap: 6px;
+            margin-right: 20px;
+        }
+
+        .term-dots .dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot.close { background-color: #ff5f56; }
+        .dot.min { background-color: #ffbd2e; }
+        .dot.max { background-color: #27c93f; }
+
+        .term-user { color: var(--accent-green); font-weight: bold; }
+        .term-path { color: var(--accent); font-weight: bold; }
+        .blinking-cursor {
+            font-weight: bold;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Contenedor Principal */
+        .container {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sistema de animaciones (Fade-In Up) */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Contenedor del Selector de Idioma */
+        .lang-switcher {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .lang-btn {
+            background-color: var(--card-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 20px; 
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+
+        .lang-btn.active {
+            background-color: rgba(88, 166, 255, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Sistema de toggle de idiomas */
+        .lang-en { display: none; }
+        body.english-mode .lang-es { display: none; }
+        body.english-mode .lang-en { display: block; }
+        body.english-mode span.lang-en { display: inline; }
+        body.english-mode div.lang-en { display: block; }
+
+        header { margin-bottom: 40px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+        h1 { font-size: 2.2rem; color: #f0f6fc; font-weight: 700; letter-spacing: -0.5px; }
+        .subtitle { color: var(--accent); font-size: 1.1rem; font-weight: 500; margin-top: 5px; }
+        section { margin-bottom: 40px; }
+        h2 { font-size: 1.4rem; color: #f0f6fc; margin-bottom: 15px; display: flex; align-items: center; }
+        h2::after { content: ""; flex: 1; margin-left: 15px; height: 1px; background-color: var(--border-color); }
+        p { color: var(--text-main); margin-bottom: 15px; font-size: 1.05rem; }
+
+        /* Tarjetas */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+        .card-title { font-size: 1.15rem; color: #f0f6fc; font-weight: 600; }
+        .tag { background-color: rgba(88, 166, 255, 0.1); color: var(--accent); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .tag-live { background-color: rgba(46, 164, 79, 0.1); color: var(--accent-green); }
+        .card-tech { margin-top: 15px; font-size: 0.85rem; color: var(--text-muted); font-family: monospace; }
+
+        /* Grid de Skills */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 15px; }
+        .skill-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skill-item:hover { transform: scale(1.05); border-color: var(--text-main); }
+
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .contact-links { display: flex; gap: 20px; margin-top: 15px; flex-wrap: wrap; }
+        .contact-links a { display: flex; align-items: center; gap: 5px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <!-- Fondo Animado -->
+    <div class="bg-animation"></div>
+
+    <!-- Terminal Superior -->
+    <div class="terminal-bar">
+        <div class="term-dots">
+            <span class="dot close"></span>
+            <span class="dot min"></span>
+            <span class="dot max"></span>
+        </div>
+        <div>
+            <span class="term-user">vsVamp@local</span>:<span class="term-path">~/portfolio</span>$ ./init_agent.sh<span class="blinking-cursor">_</span>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="lang-switcher">
+            <button class="lang-btn active" id="btn-es" onclick="setLanguage('es')">ES</button>
+            <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">EN</button>
+        </div>
+
+        <header class="animate-on-scroll">
+            <h1>Julián Miranda</h1>
+            <div class="subtitle lang-es">Estudiante de Ingeniería Civil Informática (USS) | Desarrollador de Sistemas & IA</div>
+            <div class="subtitle lang-en">Civil Informatics Engineering Student (USS) | Systems & AI Developer</div>
+            
+            <div class="contact-links">
+                <a href="mailto:sialoalo2@gmail.com">sialoalo2@gmail.com</a>
+                <a href="https://github.com/keefvampire/" target="_blank">GitHub</a>
+            </div>
+        </header>
+
+        <section id="about" class="animate-on-scroll">
+            <h2 class="lang-es">Sobre Mí</h2>
+            <h2 class="lang-en">About Me</h2>
+            <p class="lang-es">
+                Estudiante enfocado en la arquitectura de sistemas, la optimización de código y la experimentación avanzada con Inteligencia Artificial. Fuera de las aulas, me dedico al despliegue local de Modelos de Lenguaje (LLMs) y a la orquestación de agentes autónomos, abordando el desarrollo de software desde la infraestructura de hardware hasta la lógica de aplicación.
+            </p>
+            <p class="lang-en">
+                Student focused on systems architecture, code optimization, and advanced experimentation with Artificial Intelligence. Outside the classroom, I am dedicated to the local deployment of Large Language Models (LLMs) and the orchestration of autonomous agents, approaching software development from hardware infrastructure to application logic.
+            </p>
+        </section>
+
+        <section id="projects" class="animate-on-scroll">
+            <h2 class="lang-es">Proyectos de IA & Infraestructura</h2>
+            <h2 class="lang-en">AI & Infrastructure Projects</h2>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title lang-es">Orquestación de Agente de IA Local e Interfaz en Telegram</div>
+                    <div class="card-title lang-en">Local AI Agent Orchestration & Telegram Interface</div>
+                    <span class="tag tag-live lang-es">Producción Local</span>
+                    <span class="tag tag-live lang-en">Local Production</span>
+                </div>
+                <p class="lang-es">
+                    Diseño e implementación de un entorno local de inferencia. Desplegué el modelo <strong>Gamma4</strong> utilizando <strong>Ollama</strong>, integré capacidades de razonamiento y ejecución de tareas complejas mediante el framework de agentes <strong>OpenClaw</strong>, y desarrollé una pasarela de comunicación con la API de bots de <strong>Telegram</strong> para interactuar con el ecosistema de forma remota y eficiente.
+                </p>
+                <p class="lang-en">
+                    Design and implementation of a local inference environment. Deployed the <strong>Gamma4</strong> model using <strong>Ollama</strong>, integrated reasoning and complex task execution capabilities via the <strong>OpenClaw</strong> framework, and developed a communication gateway using the <strong>Telegram</strong> API to interact with the ecosystem remotely and efficiently.
+                </p>
+                <div class="card-tech">Stack: Ollama, OpenClaw, Gamma4, Telegram Bot API, Python</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title lang-es">Infraestructura de Servidor "S7" & Identidad Visual</div>
+                    <div class="card-title lang-en">"S7" Private Server Infrastructure & Visual Identity</div>
+                    <span class="tag lang-es">Infraestructura</span>
+                    <span class="tag lang-en">Infrastructure</span>
+                </div>
+                <p class="lang-es">
+                    Planificación, configuración y levantamiento de un servidor privado para la gestión de servicios y redes. El proyecto abarcó desde la administración del entorno y optimización de recursos, hasta la creación integral de su identidad visual y branding bajo un enfoque de diseño estricto y minimalista.
+                </p>
+                <p class="lang-en">
+                    Planning, configuration, and deployment of a private server for service and network management. The project spanned from environment administration and resource optimization to the complete creation of its visual identity and branding under a strict, minimalist design approach.
+                </p>
+                <div class="card-tech">Stack: Networking, System Administration, Branding</div>
+            </div>
+        </section>
+
+        <section id="web-projects" class="animate-on-scroll">
+            <h2 class="lang-es">Proyectos Web & Full-Stack</h2>
+            <h2 class="lang-en">Web & Full-Stack Projects</h2>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title lang-es">Gestor de Tareas API Full-Stack</div>
+                    <div class="card-title lang-en">Task Manager API Full-Stack</div>
+                    <span class="tag tag-live lang-es">Live</span>
+                    <span class="tag tag-live lang-en">Live</span>
+                </div>
+                <p class="lang-es">
+                    Aplicación full-stack completa con backend Express.js y frontend responsivo. Implementé operaciones CRUD completas con persistencia en JSON, validación de entrada, manejo de errores y una interfaz moderna con animaciones suave. Demostración práctica de arquitectura REST, gestión de estado del cliente y diseño responsive.
+                </p>
+                <p class="lang-en">
+                    Complete full-stack application with Express.js backend and responsive frontend. Implemented full CRUD operations with JSON persistence, input validation, error handling, and a modern interface with smooth animations. Practical demonstration of REST architecture, client-side state management, and responsive design.
+                </p>
+                <div class="contact-links" style="margin-top: 15px;">
+                    <a href="https://github.com/keefvampire/Task-manager" target="_blank">GitHub</a>
+                    <a href="https://keefvampire.github.io/Task-manager/" target="_blank">Demo</a>
+                </div>
+                <div class="card-tech">Stack: Node.js, Express.js, HTML5, CSS3, JavaScript Vanilla, JSON</div>
+            </div>
+        </section>
+
+        <section id="experience" class="animate-on-scroll">
+            <h2 class="lang-es">Experiencia Destacada</h2>
+            <h2 class="lang-en">Professional Experience</h2>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title lang-es">Supervisión de Sistemas de Monitoreo de Mercado</div>
+                    <div class="card-title lang-en">Market Monitoring Systems Supervision</div>
+                    <span class="tag lang-es">Rol Profesional</span>
+                    <span class="tag lang-en">Professional Role</span>
+                </div>
+                <p class="lang-es">
+                    A cargo de la supervisión de la plataforma analítica en una firma de investigación de mercado. Monitoreo activamente flujos de datos a gran escala sobre el comportamiento del consumidor, garantizando la estabilidad del sistema para proporcionar insights críticos y análisis comerciales directos a marcas asociadas.
+                </p>
+                <p class="lang-en">
+                    In charge of supervising the analytical platform at a market research firm. Actively monitoring large-scale data flows regarding consumer behavior, ensuring system stability to provide critical insights and direct commercial analysis to partner brands.
+                </p>
+                <div class="card-tech lang-es">Habilidades: Control de Sistemas, Flujos de Datos, Análisis</div>
+                <div class="card-tech lang-en">Skills: Systems Control, Data Flows, Data Analysis</div>
+            </div>
+        </section>
+
+        <section id="skills" class="animate-on-scroll">
+            <h2 class="lang-es">Skills Técnicas</h2>
+            <h2 class="lang-en">Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-item">Python (OOP)</div>
+                <div class="skill-item">Ollama & LLMs</div>
+                <div class="skill-item">OpenClaw (Agents)</div>
+                <div class="skill-item">JavaScript (ES6)</div>
+                <div class="skill-item">Node.js & Express</div>
+                <div class="skill-item lang-es">Análisis de Datos</div>
+                <div class="skill-item lang-en">Data Analysis</div>
+                <div class="skill-item lang-es">Refactorización</div>
+                <div class="skill-item lang-en">Code Refactoring</div>
+                <div class="skill-item">BIOS/TPM Config.</div>
+                <div class="skill-item">Windows Security</div>
+            </div>
+        </section>
+
+        <section id="certifications" class="animate-on-scroll">
+            <h2 class="lang-es">Certificaciones & Insignias</h2>
+            <h2 class="lang-en">Certifications & Badges</h2>
+            
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+                <!-- Insignia 1 (Cisco) -->
+                <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="4c189fac-fe83-4892-9280-c0f4a4699a70" data-share-badge-host="https://www.credly.com"></div>
+                
+                <!-- Insignia 2 (Cisco) -->
+                <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="c102394d-df5f-40dc-af49-3e114019b33b" data-share-badge-host="https://www.credly.com"></div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Script de Credly para cargar las insignias dinámicas -->
+    <script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
+
+    <!-- Script de lógica de cambio de idioma y animaciones -->
+    <script>
+        function setLanguage(lang) {
+            const body = document.body;
+            const btnEs = document.getElementById('btn-es');
+            const btnEn = document.getElementById('btn-en');
+
+            if (lang === 'en') {
+                body.classList.add('english-mode');
+                btnEn.classList.add('active');
+                btnEs.classList.remove('active');
+                document.title = "Julián Miranda | Engineering & AI Portfolio";
+            } else {
+                body.classList.remove('english-mode');
+                btnEs.classList.add('active');
+                btnEn.classList.remove('active');
+                document.title = "Julián Miranda | Portafolio Ingeniería & IA";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

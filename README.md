@@ -1,6 +1,8 @@
 # Gestor de Tareas API
 
-Aplicación de Gestor de Tareas completa y moderna con backend Express y frontend responsivo. Administre sus tareas diarias de manera eficiente con una interfaz limpia e intuitiva.
+Aplicación minimalista de gestión de tareas full-stack con backend Express.js y frontend responsivo, diseñada siguiendo principios de diseño limpio e intuitivo.
+
+Creada por **Julián Miranda** - [GitHub](https://github.com/keefvampire) | [Portafolio](https://keefvampire.github.io/portafolio/)
 
 ## Características
 
@@ -10,9 +12,10 @@ Operaciones CRUD Completas
 - Editar títulos y descripciones de tareas
 - Limpiar todas las tareas completadas simultáneamente
 
-Interfaz de Usuario Moderna
+Interfaz de Usuario Minimalista
 - Diseño responsivo que funciona en dispositivos móviles y escritorio
-- Diseño moderno con animaciones suave
+- Paleta de colores moderna y limpia
+- Animaciones suave y transiciones
 - Filtrado intuitivo de tareas (Todas, Activas, Completadas)
 - Contador de tareas con información de estado
 
@@ -27,20 +30,27 @@ Almacenamiento de Datos Simple
 - Tareas almacenadas en formato JSON
 - Persistencia automática
 
+Deployado en GitHub Pages
+- Sitio activo en: [Task Manager Live](https://keefvampire.github.io/Task-manager/)
+- Deploy automático con GitHub Actions
+- Actualización instantánea con cada push a main
+
 ## Pila Tecnológica
 
 - Backend: Node.js, Express.js
 - Frontend: HTML5, CSS3, JavaScript Vanilla
 - Base de Datos: Archivo JSON
-- Puerto: 3000
+- Deploy: GitHub Pages + GitHub Actions
+- Puerto (desarrollo): 3000
 
-## Inicio Rápido
+## Demo en Vivo
+Desarrollo Local
 
-### Prerrequisitos
+#### Prerrequisitos
 - Node.js (v14 o superior)
 - npm (incluido con Node.js)
 
-### Instalación
+#### Instalación
 
 1. Navegue al directorio del proyecto:
 ```bash
@@ -62,13 +72,37 @@ npm start
 http://localhost:3000
 ```
 
+### Deploy en GitHub Pages
+
+El proyecto está configurado para deployar automáticamente a GitHub Pages mediante GitHub Actions.
+
+**Primer Deploy:**
+1. Ve a tu repositorio en GitHub
+2. Settings → Pages
+3. En "Source", selecciona "GitHub Actions"
+4. Cada push a `main` deployará automáticamente
+
+**Tu sitio estará disponible en:**
+```
+https://[tu-usuario].github.io/Task-manager/
+```
+
+### Con Dominio Personalizado (Opcional)
+1. En Settings → Pages → Custom domain, agrega tu dominio
+2. En tu proveedor DNS, apunta el dominio a GitHub Pages
+
 ## Uso
 
 ### Agregar una Tarea
 1. Escriba el título de su tarea en el campo de entrada
 2. Opcionalmente agregue una descripción
-3. Haga clic en "Agregar Tarea" o presione Entrar
+3. Haga clic en "Add Task" o presione Entrar
 
+### Administrar Tareas
+- Completar: Active la casilla de verificación para marcar una tarea como completada
+- Editar: Haga clic en el botón Editar para modificar el título o descripción
+- Eliminar: Haga clic en el botón Eliminar para eliminar una tarea
+- Limpiar Completadas: Use el botón "Clear Completed
 ### Administrar Tareas
 - Completar: Active la casilla de verificación para marcar una tarea como completada
 - Editar: Haga clic en el botón Editar para modificar el título o descripción
@@ -219,25 +253,33 @@ Las tareas no persisten?
 - Verifique que `tasks.json` se haya creado en la raíz del proyecto
 - Verifique los permisos de escritura en el directorio
 
-Errores CORS?
-- Asegúrese de que el middleware CORS esté habilitado en server.js
-- Verifique que las solicitudes usen encabezados Content-Type correctos
+Errorespor **Julián Miranda**
 
-## Mejoras Futuras
+- Email: sialoalo2@gmail.com
+- GitHub: [@keefvampire](https://github.com/keefvampire)
+- Portafolio: [https://keefvampire.github.io/portafolio/](https://keefvampire.github.io/portafolio/)
 
-- Autenticación de usuario
-- Integración de base de datos (MongoDB, PostgreSQL)
-- Categorías y etiquetas de tareas
-- Fechas de vencimiento y recordatorios
-- Funcionalidad de búsqueda de tareas
-- Alternancia de modo oscuro
-- Copia de seguridad en almacenamiento local
-- Exportar tareas como CSV/PDF
+---
 
-## Licencia
-
-MIT
-
-## Autor
-
-Creado como proyecto de portafolio que demuestra desarrollo web full-stack con Node.js y JavaScript Vanilla.
+Proyecto desarrollado como demostración de desarrollo web full-stack con Node.js y JavaScript Vanilla.
+```html
+<div class="card">
+    <div class="card-header">
+        <div class="card-title lang-es">Gestor de Tareas API - Full-Stack</div>
+        <div class="card-title lang-en">Task Manager API - Full-Stack</div>
+        <span class="tag tag-live lang-es">Live</span>
+        <span class="tag tag-live lang-en">Live</span>
+    </div>
+    <p class="lang-es">
+        Aplicación full-stack completa con backend Express.js y frontend responsivo. Implementé operaciones CRUD completas con persistencia en JSON, validación de entrada, manejo de errores y una interfaz moderna con animaciones suave. Demostración práctica de arquitectura REST, gestión de estado del cliente y diseño responsive.
+    </p>
+    <p class="lang-en">
+        Complete full-stack application with Express.js backend and responsive frontend. Implemented full CRUD operations with JSON persistence, input validation, error handling, and a modern interface with smooth animations. Practical demonstration of REST architecture, client-side state management, and responsive design.
+    </p>
+    <div class="contact-links" style="margin-top: 15px;">
+        <a href="https://github.com/keefvampire/Task-manager" target="_blank">💻 GitHub</a>
+        <a href="https://keefvampire.github.io/Task-manager/" target="_blank">🔗 Demo</a>
+    </div>
+    <div class="card-tech">Stack: Node.js, Express.js, HTML5, CSS3, JavaScript Vanilla, JSON</div>
+</div>
+```
