@@ -1,5 +1,6 @@
 // API Base URL
 const API_URL = '/api/tasks';
+const STORAGE_KEY = 'taskManagerTasks';
 
 // DOM Elements
 const taskForm = document.getElementById('taskForm');
@@ -13,6 +14,8 @@ const clearCompletedBtn = document.getElementById('clearCompletedBtn');
 // State
 let allTasks = [];
 let currentFilter = 'all';
+let useLocalStorage = false;
+let nextId = 1;
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,16 +32,46 @@ const setupEventListeners = () => {
     clearCompletedBtn.addEventListener('click', handleClearCompleted);
 };
 
-// Load Tasks from API
+// Load Tasks from API or LocalStorage
 const loadTasks = async () => {
     try {
-        const response = await fetch(API_URL);
+        // Try to load from API first
+        const response = await fetch(API_URL, { timeout: 2000 });
         allTasks = await response.json();
-        renderTasks();
-        updateTaskCount();
+        useLocalStorage = false;
+        console.log('Loaded tasks from API');
     } catch (error) {
-        console.error('Error loading tasks:', error);
-        showNotification('Error loading tasks', 'error');
+        // Fallback to localStorage
+        console.log('API unavailable, using localStorage');
+        useLocalStorage = true;
+        allTasks = loadFromStorage();
+    }
+    
+    // Calculate next ID
+    if (allTasks.length > 0) {
+        nextId = Math.max(...allTasks.map(t => t.id)) + 1;
+    }
+    
+    renderTasks();
+    updateTaskCount();
+};
+
+// LocalStorage Functions
+const loadFromStorage = () => {
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+        console.error('Error loading from localStorage:', error);
+        return [];
+    }
+};
+
+const saveToStorage = () => {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasks));
+    } catch (error) {
+        console.error('Error saving to localStorage:', error);
     }
 };
 
@@ -118,11 +151,11 @@ const filterTasks = (tasks, filter) => {
 const getEmptyMessage = (filter) => {
     switch (filter) {
         case 'active':
-            return 'No active tasks. You\'re all caught up! 🎉';
+            return 'No active tasks';
         case 'completed':
-            return 'No completed tasks yet. Start checking things off! ✅';
+            return 'No completed tasks';
         default:
-            return 'No tasks yet. Create one to get started!';
+            return 'No tasks yet';
     }
 };
 
@@ -139,25 +172,43 @@ const handleAddTask = async (e) => {
     }
 
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ title, description })
-        });
+        let newTask;
 
-        if (!response.ok) {
-            throw new Error('Failed to add task');
+        if (useLocalStorage) {
+            // LocalStorage mode
+            newTask = {
+                id: nextId++,
+                title,
+                description,
+                completed: false,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            allTasks.push(newTask);
+            saveToStorage();
+        } else {
+            // API mode
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, description })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add task');
+            }
+
+            newTask = await response.json();
+            allTasks.push(newTask);
+            saveToStorage(); // Backup to storage
         }
-
-        const newTask = await response.json();
-        allTasks.push(newTask);
 
         taskForm.reset();
         renderTasks();
         updateTaskCount();
-        showNotification('Task added successfully! ✅', 'success');
+        showNotification('Task added', 'success');
     } catch (error) {
         console.error('Error adding task:', error);
         showNotification('Error adding task', 'error');
@@ -170,26 +221,42 @@ const handleToggleTask = async (taskId) => {
     if (!task) return;
 
     try {
-        const response = await fetch(`${API_URL}/${taskId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ completed: !task.completed })
-        });
+        let updatedTask;
 
-        if (!response.ok) {
-            throw new Error('Failed to update task');
+        if (useLocalStorage) {
+            // LocalStorage mode
+            updatedTask = {
+                ...task,
+                completed: !task.completed,
+                updatedAt: new Date().toISOString()
+            };
+            const index = allTasks.findIndex(t => t.id === parseInt(taskId));
+            allTasks[index] = updatedTask;
+            saveToStorage();
+        } else {
+            // API mode
+            const response = await fetch(`${API_URL}/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ completed: !task.completed })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update task');
+            }
+
+            updatedTask = await response.json();
+            const index = allTasks.findIndex(t => t.id === parseInt(taskId));
+            allTasks[index] = updatedTask;
+            saveToStorage(); // Backup to storage
         }
-
-        const updatedTask = await response.json();
-        const index = allTasks.findIndex(t => t.id === parseInt(taskId));
-        allTasks[index] = updatedTask;
 
         renderTasks();
         updateTaskCount();
         showNotification(
-            updatedTask.completed ? 'Task completed! 🎉' : 'Task marked as active',
+            updatedTask.completed ? 'Task completed' : 'Task marked as active',
             'success'
         );
     } catch (error) {
@@ -214,24 +281,41 @@ const handleEditTask = (taskId) => {
 // Update Task
 const updateTask = async (taskId, title, description) => {
     try {
-        const response = await fetch(`${API_URL}/${taskId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ title, description })
-        });
+        let updatedTask;
 
-        if (!response.ok) {
-            throw new Error('Failed to update task');
+        if (useLocalStorage) {
+            // LocalStorage mode
+            const index = allTasks.findIndex(t => t.id === parseInt(taskId));
+            updatedTask = {
+                ...allTasks[index],
+                title,
+                description,
+                updatedAt: new Date().toISOString()
+            };
+            allTasks[index] = updatedTask;
+            saveToStorage();
+        } else {
+            // API mode
+            const response = await fetch(`${API_URL}/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, description })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update task');
+            }
+
+            updatedTask = await response.json();
+            const index = allTasks.findIndex(t => t.id === parseInt(taskId));
+            allTasks[index] = updatedTask;
+            saveToStorage(); // Backup to storage
         }
 
-        const updatedTask = await response.json();
-        const index = allTasks.findIndex(t => t.id === parseInt(taskId));
-        allTasks[index] = updatedTask;
-
         renderTasks();
-        showNotification('Task updated! ✏️', 'success');
+        showNotification('Task updated', 'success');
     } catch (error) {
         console.error('Error updating task:', error);
         showNotification('Error updating task', 'error');
@@ -243,18 +327,27 @@ const handleDeleteTask = async (taskId) => {
     if (!confirm('Are you sure you want to delete this task?')) return;
 
     try {
-        const response = await fetch(`${API_URL}/${taskId}`, {
-            method: 'DELETE'
-        });
+        if (useLocalStorage) {
+            // LocalStorage mode
+            allTasks = allTasks.filter(t => t.id !== parseInt(taskId));
+            saveToStorage();
+        } else {
+            // API mode
+            const response = await fetch(`${API_URL}/${taskId}`, {
+                method: 'DELETE'
+            });
 
-        if (!response.ok) {
-            throw new Error('Failed to delete task');
+            if (!response.ok) {
+                throw new Error('Failed to delete task');
+            }
+
+            allTasks = allTasks.filter(t => t.id !== parseInt(taskId));
+            saveToStorage(); // Backup to storage
         }
 
-        allTasks = allTasks.filter(t => t.id !== parseInt(taskId));
         renderTasks();
         updateTaskCount();
-        showNotification('Task deleted! 🗑️', 'success');
+        showNotification('Task deleted', 'success');
     } catch (error) {
         console.error('Error deleting task:', error);
         showNotification('Error deleting task', 'error');
@@ -280,18 +373,27 @@ const handleClearCompleted = async () => {
     if (!confirm(`Delete ${completedCount} completed task(s)?`)) return;
 
     try {
-        const response = await fetch(`${API_URL}/completed/all`, {
-            method: 'DELETE'
-        });
+        if (useLocalStorage) {
+            // LocalStorage mode
+            allTasks = allTasks.filter(t => !t.completed);
+            saveToStorage();
+        } else {
+            // API mode
+            const response = await fetch(`${API_URL}/completed/all`, {
+                method: 'DELETE'
+            });
 
-        if (!response.ok) {
-            throw new Error('Failed to clear completed tasks');
+            if (!response.ok) {
+                throw new Error('Failed to clear completed tasks');
+            }
+
+            allTasks = allTasks.filter(t => !t.completed);
+            saveToStorage(); // Backup to storage
         }
 
-        allTasks = allTasks.filter(t => !t.completed);
         renderTasks();
         updateTaskCount();
-        showNotification(`${completedCount} completed task(s) deleted! 🗑️`, 'success');
+        showNotification(`${completedCount} completed task(s) deleted`, 'success');
     } catch (error) {
         console.error('Error clearing completed tasks:', error);
         showNotification('Error clearing completed tasks', 'error');
