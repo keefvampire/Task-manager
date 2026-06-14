@@ -1,247 +1,243 @@
-# Task Manager API
+# Gestor de Tareas API
 
-A modern, full-stack Task Manager application with Express backend and responsive frontend. Manage your daily tasks efficiently with a clean, intuitive interface.
+Aplicación de Gestor de Tareas completa y moderna con backend Express y frontend responsivo. Administre sus tareas diarias de manera eficiente con una interfaz limpia e intuitiva.
 
-## Features
+## Características
 
-✨ **Complete CRUD Operations**
-- Create, read, update, and delete tasks
-- Mark tasks as completed
-- Edit task titles and descriptions
-- Clear all completed tasks at once
+Operaciones CRUD Completas
+- Crear, leer, actualizar y eliminar tareas
+- Marcar tareas como completadas
+- Editar títulos y descripciones de tareas
+- Limpiar todas las tareas completadas simultáneamente
 
-🎨 **Beautiful UI**
-- Responsive design that works on mobile and desktop
-- Modern gradient design with smooth animations
-- Intuitive task filtering (All, Active, Completed)
-- Task counter with status information
+Interfaz de Usuario Moderna
+- Diseño responsivo que funciona en dispositivos móviles y escritorio
+- Diseño moderno con animaciones suave
+- Filtrado intuitivo de tareas (Todas, Activas, Completadas)
+- Contador de tareas con información de estado
 
-🚀 **RESTful API**
-- Well-structured Express.js backend
-- JSON-based persistent storage
-- CORS enabled for cross-origin requests
-- Comprehensive error handling
+API RESTful
+- Backend Express.js bien estructurado
+- Almacenamiento persistente basado en JSON
+- CORS habilitado para solicitudes de origen cruzado
+- Manejo completo de errores
 
-📁 **Simple Data Storage**
-- No database setup required
-- Tasks stored in JSON format
-- Automatic persistence
+Almacenamiento de Datos Simple
+- Sin necesidad de configurar base de datos
+- Tareas almacenadas en formato JSON
+- Persistencia automática
 
-## Tech Stack
+## Pila Tecnológica
 
-- **Backend**: Node.js, Express.js
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Database**: JSON file
-- **Port**: 3000
+- Backend: Node.js, Express.js
+- Frontend: HTML5, CSS3, JavaScript Vanilla
+- Base de Datos: Archivo JSON
+- Puerto: 3000
 
-## Quick Start
+## Inicio Rápido
 
-### Prerequisites
-- Node.js (v14 or higher)
-- npm (comes with Node.js)
+### Prerrequisitos
+- Node.js (v14 o superior)
+- npm (incluido con Node.js)
 
-### Installation
+### Instalación
 
-1. Navigate to the project directory:
+1. Navegue al directorio del proyecto:
 ```bash
 cd task-manager
 ```
 
-2. Install dependencies:
+2. Instale las dependencias:
 ```bash
 npm install
 ```
 
-3. Start the server:
+3. Inicie el servidor:
 ```bash
 npm start
 ```
 
-4. Open your browser and go to:
+4. Abra su navegador e ingrese a:
 ```
 http://localhost:3000
 ```
 
-## Usage
+## Uso
 
-### Adding a Task
-1. Type your task title in the input field
-2. Optionally add a description
-3. Click "Add Task" or press Enter
+### Agregar una Tarea
+1. Escriba el título de su tarea en el campo de entrada
+2. Opcionalmente agregue una descripción
+3. Haga clic en "Agregar Tarea" o presione Entrar
 
-### Managing Tasks
-- **Complete**: Check the checkbox to mark a task as complete
-- **Edit**: Click the Edit button to modify the title or description
-- **Delete**: Click the Delete button to remove a task
-- **Clear Completed**: Use the "Clear Completed" button to remove all finished tasks
+### Administrar Tareas
+- Completar: Active la casilla de verificación para marcar una tarea como completada
+- Editar: Haga clic en el botón Editar para modificar el título o descripción
+- Eliminar: Haga clic en el botón Eliminar para eliminar una tarea
+- Limpiar Completadas: Use el botón "Limpiar Completadas" para eliminar todas las tareas terminadas
 
-### Filtering Tasks
-- **All**: View all tasks
-- **Active**: View only incomplete tasks
-- **Completed**: View only completed tasks
+### Filtrado de Tareas
+- Todas: Ver todas las tareas
+- Activas: Ver solo tareas incompletas
+- Completadas: Ver solo tareas completadas
 
-## API Endpoints
+## Puntos de Acceso de API
 
-### Get All Tasks
+### Obtener Todas las Tareas
 ```http
 GET /api/tasks
 ```
 
-### Get Single Task
+### Obtener una Tarea Individual
 ```http
 GET /api/tasks/:id
 ```
 
-### Create Task
+### Crear Tarea
 ```http
 POST /api/tasks
 Content-Type: application/json
 
 {
-  "title": "Learn Node.js",
-  "description": "Complete the Express tutorial"
+  "title": "Aprender Node.js",
+  "description": "Completar el tutorial de Express"
 }
 ```
 
-### Update Task
+### Actualizar Tarea
 ```http
 PUT /api/tasks/:id
 Content-Type: application/json
 
 {
-  "title": "Learn Express.js",
-  "description": "Master REST APIs",
+  "title": "Aprender Express.js",
+  "description": "Dominar las API REST",
   "completed": true
 }
 ```
 
-### Delete Task
+### Eliminar Tarea
 ```http
 DELETE /api/tasks/:id
 ```
 
-### Clear All Completed Tasks
+### Limpiar Todas las Tareas Completadas
 ```http
 DELETE /api/tasks/completed/all
 ```
 
-## Project Structure
+## Estructura del Proyecto
 
 ```
 task-manager/
-├── server.js              # Express API server
-├── package.json           # Project dependencies
-├── tasks.json             # Task database (auto-generated)
+├── server.js              # Servidor API Express
+├── package.json           # Dependencias del proyecto
+├── tasks.json             # Base de datos de tareas (generado automáticamente)
 ├── public/
-│   ├── index.html         # Main HTML template
-│   ├── style.css          # Responsive styles
-│   └── app.js             # Frontend JavaScript
-└── README.md              # This file
+│   ├── index.html         # Plantilla HTML principal
+│   ├── style.css          # Estilos responsivos
+│   └── app.js             # JavaScript del frontend
+└── README.md              # Este archivo
 ```
 
-## Features in Detail
+## Características en Detalle
 
 ### Backend (server.js)
-- Express.js server with REST API
-- CORS support
-- JSON file-based data persistence
-- Input validation
-- Error handling with appropriate HTTP status codes
-- Automatic ID generation
-- Timestamp tracking (createdAt, updatedAt)
+- Servidor Express.js con API REST
+- Soporte para CORS
+- Persistencia de datos basada en archivos JSON
+- Validación de entrada
+- Manejo de errores con códigos de estado HTTP apropiados
+- Generación automática de ID
+- Seguimiento de marcas de tiempo (createdAt, updatedAt)
 
 ### Frontend (public/)
-- Single-page application
-- Real-time task updates
-- Task filtering with visual feedback
-- Form validation
-- Responsive design
-- Smooth animations and transitions
-- User-friendly error messages
+- Aplicación de página única
+- Actualizaciones de tareas en tiempo real
+- Filtrado de tareas con retroalimentación visual
+- Validación de formularios
+- Diseño responsivo
+- Animaciones y transiciones suaves
+- Mensajes de error amigables
 
-## Data Structure
+## Estructura de Datos
 
-Each task object contains:
+Cada objeto de tarea contiene:
 ```json
 {
   "id": 1,
-  "title": "Sample Task",
-  "description": "Task description",
+  "title": "Tarea de Ejemplo",
+  "description": "Descripción de la tarea",
   "completed": false,
   "createdAt": "2024-01-15T10:30:00.000Z",
   "updatedAt": "2024-01-15T10:30:00.000Z"
 }
 ```
 
-## Customization
+## Personalización
 
-### Styling
-Edit `public/style.css` to customize colors, fonts, and layout.
+### Estilos
+Edite `public/style.css` para personalizar colores, fuentes y diseño.
 
-### API Port
-Change the `PORT` variable in `server.js` to use a different port.
+### Puerto de API
+Cambie la variable `PORT` en `server.js` para usar un puerto diferente.
 
-### Database Location
-Modify the `dbPath` in `server.js` to store tasks.json elsewhere.
+### Ubicación de la Base de Datos
+Modifique la ruta `dbPath` en `server.js` para almacenar tasks.json en otro lugar.
 
-## Development
+## Desarrollo
 
-### Available Scripts
+### Scripts Disponibles
 
 ```bash
-# Start the server
+# Iniciar el servidor
 npm start
 
-# Start with auto-reload (requires nodemon)
+# Iniciar con recarga automática (requiere nodemon)
 npm install --save-dev nodemon
 npx nodemon server.js
 ```
 
-### Browser DevTools
-- Open DevTools (F12) to see API calls in the Network tab
-- Console shows any error messages
+### Herramientas de Desarrollo del Navegador
+- Abra las Herramientas de Desarrollo (F12) para ver las llamadas a API en la pestaña Red
+- La consola muestra cualquier mensaje de error
 
-## Performance Notes
+## Notas de Rendimiento
 
-- JSON file I/O is used for simplicity and learning
-- For production with many tasks, consider a proper database
-- Current implementation is suitable for learning and small projects
+- La entrada/salida de archivos JSON se utiliza por simplicidad y aprendizaje
+- Para producción con muchas tareas, considere una base de datos adecuada
+- La implementación actual es adecuada para proyectos de aprendizaje y pequeños
 
-## Troubleshooting
+## Solución de Problemas
 
-**Port 3000 already in use?**
+Puerto 3000 ya está en uso?
 ```bash
-# Change port in server.js
+# Cambiar puerto en server.js
 const PORT = 3001;
 ```
 
-**Tasks not persisting?**
-- Check that `tasks.json` is created in the project root
-- Verify write permissions in the directory
+Las tareas no persisten?
+- Verifique que `tasks.json` se haya creado en la raíz del proyecto
+- Verifique los permisos de escritura en el directorio
 
-**CORS errors?**
-- Ensure CORS middleware is enabled in server.js
-- Check that requests use correct Content-Type headers
+Errores CORS?
+- Asegúrese de que el middleware CORS esté habilitado en server.js
+- Verifique que las solicitudes usen encabezados Content-Type correctos
 
-## Future Enhancements
+## Mejoras Futuras
 
-- User authentication
-- Database integration (MongoDB, PostgreSQL)
-- Task categories and tags
-- Due dates and reminders
-- Task search functionality
-- Dark mode toggle
-- Local storage backup
-- Export tasks as CSV/PDF
+- Autenticación de usuario
+- Integración de base de datos (MongoDB, PostgreSQL)
+- Categorías y etiquetas de tareas
+- Fechas de vencimiento y recordatorios
+- Funcionalidad de búsqueda de tareas
+- Alternancia de modo oscuro
+- Copia de seguridad en almacenamiento local
+- Exportar tareas como CSV/PDF
 
-## License
+## Licencia
 
 MIT
 
-## Author
+## Autor
 
-Created as a portfolio project demonstrating full-stack web development with Node.js and Vanilla JavaScript.
-
----
-
-**Happy task managing!** 📋✨
+Creado como proyecto de portafolio que demuestra desarrollo web full-stack con Node.js y JavaScript Vanilla.
